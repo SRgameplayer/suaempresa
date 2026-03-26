@@ -30,7 +30,7 @@
 
   /* NAV */
   nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
     padding: 1rem 5%;
     background: rgba(250,248,244,0.97);
@@ -45,12 +45,11 @@
     font-size: 1.35rem; font-weight: 700;
     letter-spacing: -.5px; color: var(--charcoal);
     text-decoration: none; flex-shrink: 0;
-    position: relative; z-index: 202;
   }
   .nav-logo span { color: var(--gold); }
 
-  /* Desktop nav links — hidden on mobile */
-  .nav-links { display: none; list-style: none; }
+  /* Nav links: hidden on mobile, shown on desktop */
+  .nav-links { display: none; list-style: none; gap: 2.5rem; align-items: center; }
   .nav-links a {
     text-decoration: none; color: var(--warm-gray); font-size: .92rem;
     font-weight: 500; transition: color .2s;
@@ -63,33 +62,18 @@
   }
   .nav-cta:hover { background: var(--gold) !important; }
 
-  /* Hamburger button — always on top */
-  .hamburger {
-    display: flex; flex-direction: column; gap: 5px;
-    cursor: pointer; background: none; border: none; padding: 6px;
-    position: relative; z-index: 202; flex-shrink: 0;
+  /* Mobile-only CTA button in nav bar */
+  .nav-mobile-cta {
+    display: inline-block;
+    background: var(--charcoal); color: var(--white);
+    padding: .5rem 1.2rem; border-radius: 50px;
+    font-size: .85rem; font-weight: 600; text-decoration: none;
+    white-space: nowrap; transition: background .2s;
   }
-  .hamburger span { width: 24px; height: 2px; background: var(--charcoal); display: block; transition: .3s; border-radius: 2px; }
-  .hamburger.active span { background: var(--charcoal); }
-  .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .hamburger.active span:nth-child(2) { opacity: 0; }
-  .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .nav-mobile-cta:hover { background: var(--gold); }
 
-  /* Mobile fullscreen menu */
-  .nav-links.open {
-    display: flex; flex-direction: column;
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: var(--cream);
-    justify-content: center; align-items: center;
-    gap: 2rem; z-index: 201; padding: 2rem;
-  }
-  .nav-links.open li { list-style: none; }
-  .nav-links.open a { font-size: 1.3rem; font-weight: 600; color: var(--charcoal); text-decoration: none; }
-  .nav-links.open .nav-cta {
-    display: inline-block; font-size: 1.1rem; padding: .8rem 2.2rem;
-    background: var(--charcoal); color: var(--white) !important;
-    border-radius: 50px;
-  }
+  /* Hamburger: hidden always */
+  .hamburger { display: none; }
 
   /* BASE SECTIONS */
   section { padding: 4rem 5%; }
@@ -319,10 +303,8 @@
   /* DESKTOP 900px+ */
   @media (min-width: 900px) {
     nav { padding: 1.2rem 6%; }
-    .nav-links { display: flex !important; gap: 2.5rem; position: static; background: none; padding: 0; }
-    .nav-links li { list-style: none; }
-    .nav-links a { font-size: .92rem; font-weight: 500; color: var(--warm-gray); }
-    .nav-links .nav-cta { font-size: .92rem; padding: .5rem 1.3rem; display: inline-block; }
+    .nav-links { display: flex; }
+    .nav-mobile-cta { display: none; }
     .hamburger { display: none; }
     section { padding: 6rem 6%; }
     .services-grid { grid-template-columns: repeat(3, 1fr); gap: 1.8rem; }
@@ -344,9 +326,7 @@
     <li><a href="#testimonials">Depoimentos</a></li>
     <li><a href="#cta" class="nav-cta">Falar Agora</a></li>
   </ul>
-  <button class="hamburger" id="hamburger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
+  <a href="https://wa.me/5521990873467" target="_blank" class="nav-mobile-cta">📲 Falar Agora</a>
 </nav>
 
 <!-- HERO -->
@@ -530,21 +510,6 @@
 <script>
   const nav = document.getElementById('navbar');
   window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
-
-  const hamburger = document.getElementById('hamburger');
-  const navLinks = document.getElementById('nav-links');
-  hamburger.addEventListener('click', () => {
-    const isOpen = navLinks.classList.toggle('open');
-    hamburger.classList.toggle('active', isOpen);
-    document.body.style.overflow = isOpen ? 'hidden' : '';
-  });
-  navLinks.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      hamburger.classList.remove('active');
-      document.body.style.overflow = '';
-    });
-  });
 
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(e => {
